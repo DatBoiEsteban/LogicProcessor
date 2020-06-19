@@ -12,7 +12,5 @@ fun vars prop =
       => vars prop1 @ vars prop2
 ;
 
-
-val prop =  (variable "p") :&&: (variable "p");
 fun isolate [] = []
   | isolate (x::xs) = x::isolate(List.filter (fn y => y <> x) xs);
