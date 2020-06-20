@@ -52,4 +52,6 @@ fun evalProp prop =
           end
 ;
 
-val prop = (variable "p") :&&: (variable "q");
+val prop = (variable "p") :=>: (~: (variable "p"));
+
+

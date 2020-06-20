@@ -3,7 +3,7 @@ fun pow m 0 = 1
       m * pow m (n-1)
 ;
 
-fun gen_bools_list_aux boolean 0= [] 
+fun gen_bools_list_aux boolean 0 = [] 
   | gen_bools_list_aux boolean len =
     [boolean] @ gen_bools_list_aux boolean (len-1)
 ;
