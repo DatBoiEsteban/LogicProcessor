@@ -1,5 +1,5 @@
 datatype Proposicion =
-    constante       of bool
+  constante       of bool
 |   variable        of string
 |   negacion        of Proposicion
 |   conjuncion      of Proposicion * Proposicion
@@ -23,33 +23,33 @@ infix 4 :<=>:
 val (op :<=>:)  = equivalencia
 
 fun evalProp prop =
-  case prop of
-    constante valor
+    case prop of
+      constante valor
       => valor
-  | negacion prop1
-      => not (evalProp prop1)
-  | conjuncion (prop1, prop2)
-      => let val valor1 = evalProp prop1
-              and valor2 = evalProp prop2
-          in  valor1 andalso valor2
-          end
-  | disyuncion (prop1, prop2)
-      => let val valor1 = evalProp prop1
-              and valor2 = evalProp prop2
-          in  valor1 orelse valor2
-          end
-  | implicacion (prop1, prop2)
-      => let val valor1 = evalProp prop1
-              and valor2 = evalProp prop2
-          in  case (valor1, valor2) of
-                (true, false) => false
-              | _             => true
-          end
-  | equivalencia (prop1, prop2)
-      => let val valor1 = evalProp prop1
-              and valor2 = evalProp prop2
-          in  valor1 = valor2
-          end
+    | negacion prop1
+    => not (evalProp prop1)
+    | conjuncion (prop1, prop2)
+    => let val valor1 = evalProp prop1
+        and valor2 = evalProp prop2
+      in  valor1 andalso valor2
+      end
+    | disyuncion (prop1, prop2)
+    => let val valor1 = evalProp prop1
+        and valor2 = evalProp prop2
+      in  valor1 orelse valor2
+      end
+    | implicacion (prop1, prop2)
+    => let val valor1 = evalProp prop1
+        and valor2 = evalProp prop2
+      in  case (valor1, valor2) of
+          (true, false) => false
+        | _             => true
+      end
+    | equivalencia (prop1, prop2)
+    => let val valor1 = evalProp prop1
+        and valor2 = evalProp prop2
+      in  valor1 = valor2
+      end
 ;
 
 val prop = (variable "p") :=>: (~: (variable "p"));
