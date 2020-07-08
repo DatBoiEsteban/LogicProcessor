@@ -1,7 +1,9 @@
 fun vars_aux prop =
     case prop of
-      variable valor
-      => [valor]
+      constante valor
+      => []
+    | variable valor
+    => [valor]
     | negacion (prop)
     => vars_aux prop
     | conjuncion (prop1, prop2)
@@ -12,6 +14,7 @@ fun vars_aux prop =
     => vars_aux prop1 @ vars_aux prop2
     | equivalencia (prop1, prop2)
     => vars_aux prop1 @ vars_aux prop2
+    
 ;
 
 fun isolate [] = []

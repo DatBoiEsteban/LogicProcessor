@@ -1,57 +1,15 @@
-datatype Proposicion =
-  constante       of bool
-|   variable        of string
-|   negacion        of Proposicion
-|   conjuncion      of Proposicion * Proposicion
-|   disyuncion      of Proposicion * Proposicion
-|   implicacion     of Proposicion * Proposicion
-|   equivalencia    of Proposicion * Proposicion
+use "data.sml";
+use "vars.sml";
+use "gen_bools.sml";
+use "as_vals.sml";
+use "taut.sml";
 
-nonfix ~:
-val ~:          = negacion
+val prop = (variable "p") :||: (~: (variable "p"));
 
-infix 7 :&&:
-val (op :&&:)   = conjuncion
+val letras = vars prop;
 
-infix 6 :||:
-val (op :||:)   = disyuncion
+val booleans = gen_bools (length letras);
 
-infix 5 :=>:
-val (op :=>:)   = implicacion
+val vals = as_vals letras booleans;
 
-infix 4 :<=>:
-val (op :<=>:)  = equivalencia
-
-fun evalProp prop =
-    case prop of
-      constante valor
-      => valor
-    | negacion prop1
-    => not (evalProp prop1)
-    | conjuncion (prop1, prop2)
-    => let val valor1 = evalProp prop1
-        and valor2 = evalProp prop2
-      in  valor1 andalso valor2
-      end
-    | disyuncion (prop1, prop2)
-    => let val valor1 = evalProp prop1
-        and valor2 = evalProp prop2
-      in  valor1 orelse valor2
-      end
-    | implicacion (prop1, prop2)
-    => let val valor1 = evalProp prop1
-        and valor2 = evalProp prop2
-      in  case (valor1, valor2) of
-          (true, false) => false
-        | _             => true
-      end
-    | equivalencia (prop1, prop2)
-    => let val valor1 = evalProp prop1
-        and valor2 = evalProp prop2
-      in  valor1 = valor2
-      end
-;
-
-val prop = (variable "p") :=>: (~: (variable "p"));
-
-
+val tauto = taut prop vals;
