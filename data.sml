@@ -21,3 +21,5 @@ val (op :=>:)   = implicacion
 
 infix 4 :<=>:
 val (op :<=>:)  = equivalencia
+
+exception NoEsTautologia of string;

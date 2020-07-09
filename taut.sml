@@ -20,30 +20,46 @@ fun evalProp prop vals=
     | negacion prop1
     => not (evalProp prop1 vals)
     | conjuncion (prop1, prop2)
-    => let val valor1 = evalProp prop1 vals
+    => let
+        val valor1 = evalProp prop1 vals
         and valor2 = evalProp prop2 vals
-      in  valor1 andalso valor2
+      in
+        valor1 andalso valor2
       end
     | disyuncion (prop1, prop2)
-    => let val valor1 = evalProp prop1 vals
+    => let 
+        val valor1 = evalProp prop1 vals
         and valor2 = evalProp prop2 vals
-      in  valor1 orelse valor2
+      in
+        valor1 orelse valor2
       end
     | implicacion (prop1, prop2)
-    => let val valor1 = evalProp prop1 vals
+    => let 
+        val valor1 = evalProp prop1 vals
         and valor2 = evalProp prop2 vals
-      in  case (valor1, valor2) of
+      in
+        case (valor1, valor2) of
           (true, false) => false
         | _             => true
       end
     | equivalencia (prop1, prop2)
-    => let val valor1 = evalProp prop1 vals
+    => let
+        val valor1 = evalProp prop1 vals
         and valor2 = evalProp prop2 vals
-      in  valor1 = valor2
+      in  
+        valor1 = valor2
       end
 ;
 
-fun taut prop [] = true
-  |   taut prop (x::xs) =
-    evalProp prop x andalso taut prop xs
+fun taut prop [] = "true"
+  | taut prop (x::xs) =
+    let
+      val evaluado = evalProp prop x;
+    in
+      if evaluado
+      then
+        taut prop xs
+      else
+        str_a x
+    end
 ;
