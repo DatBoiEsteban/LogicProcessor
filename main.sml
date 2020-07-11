@@ -1,4 +1,4 @@
-use "aux.sml";
+use "auxiliar.sml";
 use "data.sml";
 use "vars.sml";
 use "gen_bools.sml";
