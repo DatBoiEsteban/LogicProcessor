@@ -10,11 +10,9 @@ fun simpl_aux prop =
       val h = And g;
       val i = Implicacion h;
       val j = Idempotencia i;
-      val k = Inversos j;
-      val l = Variable k;
-      val m = Constante l;
+      val k = Inversos j ;
     in
-      m
+      k
     end
 and Absorcion_avanzada prop =
     case prop of
@@ -256,34 +254,20 @@ and Inversos prop =
       else
         disyuncion ( simpl_aux (negacion ( simpl_aux a )), simpl_aux b)
     | _ => prop
-and Variable prop =
-    case prop of
-      variable valor
-      =>
-        variable valor
-    | _ => prop
-and Constante prop =
-    case prop of
-      constante valor
-      =>
-        constante valor
-    | _ => prop
 ;
 
-fun simpl_aux2 prop last =
-    if
-      prop = last
-    then
-      last
-    else
-      let
-        val new_prop = simpl_aux prop;
-      in
+fun simpl_aux2 prop last = 
+    let
+      val new_prop = simpl_aux prop;
+    in
+      if
+        new_prop = last
+      then
+        last
+      else
         simpl_aux2 new_prop prop
-      end
+      end     
 ;
 
-fun simpl (constante a) = constante a
-  | simpl (variable a) = variable a
-  | simpl prop = simpl_aux2 prop (constante true)
+fun simpl prop = simpl_aux2 prop prop
 ;

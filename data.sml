@@ -1,5 +1,5 @@
 datatype Proposicion =
-  constante       of bool
+    constante       of bool
 |   variable        of string
 |   negacion        of Proposicion
 |   conjuncion      of Proposicion * Proposicion
