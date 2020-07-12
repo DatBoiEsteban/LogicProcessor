@@ -32,6 +32,6 @@ val prop12 = ((variable "p") :||: ((~:(variable "p")) :&&: (variable "q"))) (* e
 
 val prop13 = ((variable "p") :&&: ((~:(variable "p")) :||: (variable "q"))) (* ejemplo de absorcion compleja *)
 
-val prop14 =
+val prop14 = ((constante true) :=>: (variable "p")) (* ejemplo de implica con constantes *)
 
-val prop15 = 
+val prop15 = ((constante false) :=>: (variable "p")) (* ejemplo de implica con constantes *)
