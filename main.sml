@@ -6,50 +6,32 @@ use "as_vals.sml";
 use "taut.sml";
 use "simpl.sml";
 
-val prop  = ( ~: (((~: (variable "p")) :&&: (~:(variable "p"))) :||: ((variable "p") :&&: (variable "p")) ) );
+val prop   = ( ~: (((~: (variable "p")) :&&: (~:(variable "p"))) :||: ((variable "p") :&&: (variable "p")) ) );
 
-val prop2 = ((variable "p") :||: (variable "p")) (* ejemplo de idempotencia *)
+val prop2  = ((variable "p") :||: (variable "p")) (* ejemplo de idempotencia *)
 
-val prop3 = ((variable "p") :&&: (variable "p")) (* ejemplo de idempotencia *)
+val prop3  = ((variable "p") :&&: (variable "p")) (* ejemplo de idempotencia *)
 
-val prop4 = ((variable "p") :&&: (constante true)) (* ejemplo de neutro *)
+val prop4  = ((variable "p") :&&: (constante true)) (* ejemplo de neutro *)
 
-val prop5 = ((variable "p") :||: (constante false)) (* ejemplo de neutro *)
+val prop5  = ((variable "p") :||: (constante false)) (* ejemplo de neutro *)
 
-val prop6 = ((variable "p") :||: (~: (variable "p")) ) (* ejemplo de inverso *)
+val prop6  = ((variable "p") :||: (~: (variable "p")) ) (* ejemplo de inverso *)
 
-val prop7 = ((variable "p") :&&: (~: (variable "p")) ) (* ejemplo de inverso *)
+val prop7  = ((variable "p") :&&: (~: (variable "p")) ) (* ejemplo de inverso *)
 
-val prop8 = ((variable "p") :||: (constante true)) (* ejemplo de dominacion *)
+val prop8  = ((variable "p") :||: (constante true)) (* ejemplo de dominacion *)
 
-val prop9 = ((variable "p") :&&: (constante false)) (* ejemplo de dominacion *)
+val prop9  = ((variable "p") :&&: (constante false)) (* ejemplo de dominacion *)
 
 val prop10 = (((variable "p") :&&: (variable "q")) :||: (variable "p")) (* ejemplo de absorcion *)
 
 val prop11 = ((variable "p") :&&: ((variable "p") :||: (variable "q"))) (* ejemplo de absorcion *)
 
+val prop12 = ((variable "p") :||: ((~:(variable "p")) :&&: (variable "q"))) (* ejemplo de absorcion compleja *)
 
-(* falta el ejemplo de absorcion avanzada y de implica (Nacho)*) 
+val prop13 = ((variable "p") :&&: ((~:(variable "p")) :||: (variable "q"))) (* ejemplo de absorcion compleja *)
 
+val prop14 =
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-(*val letras = vars prop;
-
-val booleans = gen_bools (length letras);
-
-val vals = as_vals letras booleans;
-
-val tauto = taut prop vals;*)
+val prop15 = 

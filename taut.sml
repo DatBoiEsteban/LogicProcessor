@@ -63,3 +63,13 @@ fun taut prop [] = "true"
         str_a x
     end
 ;
+
+fun test prop =
+  let
+    val rvars = vars prop;
+    val rgen_bools = gen_bools (length rvars);
+    val ras_vals = as_vals rvars rgen_bools;
+  in
+    taut prop ras_vals
+  end
+;
