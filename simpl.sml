@@ -1,3 +1,7 @@
+(* Parámetros: Toma como valor una proposición. 
+   Descripción: Simplifica la proposición en caso de encontrar concordancia con alguna regla establecida.
+   Retorno: Retorna la preposición simplificada.
+*)
 fun simpl_aux prop =
     let
       val a = Absorcion_avanzada prop;
@@ -14,9 +18,9 @@ fun simpl_aux prop =
     in
       k
     end
-and Absorcion_avanzada prop =
+and Absorcion_avanzada prop = (* Pv(¬P^Q) ≡ PvQ -----  P^(¬PvQ) ≡ P^Q  y sus variaciones *)
     case prop of
-      disyuncion (a, conjuncion (negacion(b), c))
+      disyuncion (a, conjuncion (negacion(b), c)) 
       =>
         if
           a=b
@@ -81,7 +85,7 @@ and Absorcion_avanzada prop =
       else
         conjuncion ( simpl_aux(disyuncion(simpl_aux a,simpl_aux (negacion(simpl_aux b)))), simpl_aux c)
     | _ => prop
-and Absorcion prop =
+and Absorcion prop =  (* Pv(P^Q) ≡ P -----  P^(PvQ) ≡ P  y sus variaciones *)
     case prop of
       conjuncion ( a, disyuncion ( b, c))
       =>
@@ -124,13 +128,13 @@ and Absorcion prop =
       else
         disyuncion ( simpl_aux (conjuncion( simpl_aux a, simpl_aux b)), simpl_aux c)
     | _ => prop
-and Doble_negacion prop =
+and Doble_negacion prop = (* ¬¬P ≡ P *)
     case prop of
       negacion (negacion ( a))
       =>
         a
     | _ => prop
-and Negacion prop =
+and Negacion prop = (* ¬(P) ≡ ¬P *)
     case prop of
       negacion (constante a)
       => 
@@ -139,7 +143,7 @@ and Negacion prop =
     =>
       negacion ( simpl_aux a)
     | _ => prop
-and Dominacion prop =
+and Dominacion prop = (* P^False ≡ False ----- PvTrue ≡ True y sus variaciones *)
     case prop of
       conjuncion (constante false, a)
       =>
@@ -154,7 +158,7 @@ and Dominacion prop =
     =>
       constante true
     | _ => prop
-and Neutro prop =
+and Neutro prop = (* PvFalse ≡ P ----- P^True ≡ P y sus variaciones *)
     case prop of
       conjuncion (constante true, a) 
       =>
@@ -169,7 +173,7 @@ and Neutro prop =
     =>
       simpl_aux a
     | _ => prop
-and Or prop =
+and Or prop =  (* PvQ *)
     case prop of
       disyuncion (constante a, constante b)
       =>
@@ -180,7 +184,7 @@ and Or prop =
         else
           constante false
     | _ => prop
-and And prop =
+and And prop = (* P^Q *)
     case prop of
       conjuncion (constante a, constante b)
       =>
@@ -191,7 +195,7 @@ and And prop =
         else
           constante false
     | _ => prop
-and Implicacion prop =
+and Implicacion prop = (* False=>P ≡ True ----- True=>P ≡ P *)
     case prop of
       implicacion (constante false, a)
       =>
@@ -200,7 +204,7 @@ and Implicacion prop =
     =>
       simpl_aux a
     | _ => prop
-and Idempotencia prop =
+and Idempotencia prop = (* PvP ≡ P -----  P^P ≡ P *)
     case prop of
       conjuncion ( a, b)
       => 
@@ -219,7 +223,7 @@ and Idempotencia prop =
       else
         disyuncion ( simpl_aux a, simpl_aux b)
     | _ => prop
-and Inversos prop =
+and Inversos prop = (* Pv¬P ≡ True -----  P^¬P ≡ False *)
     case prop of
       conjuncion ( a, negacion ( b ))
       =>
@@ -256,6 +260,10 @@ and Inversos prop =
     | _ => prop
 ;
 
+(* Parámetros: Toma como valores dos veces la misma proposición. 
+   Descripción: Controla las simplificaciones que se le realicen a la preposición, verifica si se ha alcanzado el máximo de simplificaciones posibles.
+   Retorno: La expresión más simplificada.
+*)
 fun simpl_aux2 prop last = 
     let
       val new_prop = simpl_aux prop;
@@ -269,5 +277,57 @@ fun simpl_aux2 prop last =
       end     
 ;
 
+(* Parámetros: Toma una proposición.
+   Descripción: Utliza a la función auxiliar simpl_aux2 para realizar la simplificación de la proposición lógica.
+   Retorno: El resultado de simpl_aux2.
+*)
 fun simpl prop = simpl_aux2 prop prop
 ;
+
+
+(*Pruebas*)
+
+val prop2  = ((variable "p") :||: (variable "p")) (* ejemplo de idempotencia *)
+(* variable "p" *)
+
+val prop3  = ((variable "p") :&&: (variable "p")) (* ejemplo de idempotencia *)
+(* variable "p" *)
+
+val prop4  = ((variable "p") :&&: (constante true)) (* ejemplo de neutro *)
+(* variable "p" *)
+
+val prop5  = ((variable "p") :||: (constante false)) (* ejemplo de neutro *)
+(* variable "p" *)
+
+val prop6  = ((variable "p") :||: (~: (variable "p")) ) (* ejemplo de inverso *)
+(* constante true *)
+
+val prop7  = ((variable "p") :&&: (~: (variable "p")) ) (* ejemplo de inverso *)
+(* constante false *)
+
+val prop8  = ((variable "p") :||: (constante true)) (* ejemplo de dominacion *)
+(* constante true *)
+
+val prop9  = ((variable "p") :&&: (constante false)) (* ejemplo de dominacion *)
+(* constante false *)
+
+val prop10 = (((variable "p") :&&: (variable "q")) :||: (variable "p")) (* ejemplo de absorcion *)
+(* variable "p" *)
+
+val prop11 = ((variable "p") :&&: ((variable "p") :||: (variable "q"))) (* ejemplo de absorcion *)
+(* variable "p" *)
+
+val prop12 = ((variable "p") :||: ((~:(variable "p")) :&&: (variable "q"))) (* ejemplo de absorcion compleja *)
+(* disyuncion(variable "p", variable "q") *)
+
+val prop13 = ((variable "p") :&&: ((~:(variable "p")) :||: (variable "q"))) (* ejemplo de absorcion compleja *)
+(*conjuncion(variable "p", variable "q")*)
+
+val prop14 = ((constante true) :=>: (variable "p")) (* ejemplo de implica con constantes *)
+(* variable "p" *)
+
+val prop15 = ((constante false) :=>: (variable "p")) (* ejemplo de implica con constantes *)
+(* constante true *)
+
+val pruebaSimplMix = ( ~: (((~: (variable "p")) :&&: (~:(variable "p"))) :||: ((variable "p") :&&: (variable "p")) ) ); 
+(* constante false *)
