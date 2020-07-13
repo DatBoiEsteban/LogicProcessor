@@ -11,7 +11,7 @@ fun get_bool _ [] = false
     end
 ;
 
-fun evalProp prop vals=
+fun evalProp prop vals =
     case prop of
       constante valor
       => valor
